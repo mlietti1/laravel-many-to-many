@@ -24,6 +24,7 @@
             <tr>
                 <th scope="col"><a href="{{route('admin.projects.orderby', ['id', $direction])}}">ID</a></th>
                 <th scope="col"><a href="{{route('admin.projects.orderby', ['name', $direction])}}">Name</a></th>
+                <th>Technologies</th>
                 <th scope="col"><a href="{{route('admin.projects.orderby', ['client_name', $direction])}}">Client name</a></th>
                 <th scope="col">Actions</th>
             </tr>
@@ -38,7 +39,7 @@
                         <span class="badge text-bg-warning">{{$technology->name}}</span>
 
                     @empty
-                        - no data -
+
                     @endforelse
 
                 </td>
