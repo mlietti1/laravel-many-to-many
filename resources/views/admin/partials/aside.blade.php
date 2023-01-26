@@ -11,5 +11,8 @@
         <li class="mb-2">
             <a  class="sc-nav-link" class="" href="{{route('admin.types.index')}}"><i class="fa-solid fa-folder-open"></i> Types</a>
         </li>
+        <li class="mb-2">
+            <a  class="sc-nav-link" class="" href="{{route('admin.technologies.index')}}"><i class="fa-solid fa-bookmark"></i> Technologies</a>
+        </li>
     </ul>
 </nav>

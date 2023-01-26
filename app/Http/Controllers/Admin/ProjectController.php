@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Cache\Store;
@@ -51,8 +52,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $technologies = Technology::all();
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -73,6 +75,11 @@ class ProjectController extends Controller
         }
 
         $new_project = Project::create($project_data);
+
+        if(array_key_exists('technologies', $project_data)){
+            $new_project->technologies()->attach($project_data['technologies']);
+        }
+
 
         return redirect()->route('admin.projects.show', $new_project)->with('message', 'Project created successfully.');
     }
@@ -97,7 +104,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -125,6 +133,13 @@ class ProjectController extends Controller
         }
 
         $project->update($project_data);
+
+        if(array_key_exists('technologies', $project_data)){
+            $project->technologies()->sync($project_data['technologies']);
+        }else{
+            $project->technologies()->detach();
+        }
+
         return redirect()->route('admin.projects.show', $project)->with('message', 'Project updated successfully.');
     }
 

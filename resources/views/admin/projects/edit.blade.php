@@ -60,6 +60,24 @@
         </div>
 
         <div class="mb-3">
+            <p for="date" class="form-label">Technologies:</p>
+            @foreach ($technologies as $technology )
+                <input class="me-1" type="checkbox"
+                id="technology{{$loop->iteration}}"
+                name="technologies[]"
+                value="{{$technology->id}}"
+                @if (!$errors->all() && $project->technologies->contains($technology))
+                    checked
+                @elseif ($errors->all() && in_array($technology->id, old('technologies', [])))
+
+                @endif
+                >
+                <label class="me-3" for="tag{{$loop->iteration}}">{{$technology->name}}</label>
+            @endforeach
+
+        </div>
+
+        <div class="mb-3">
             <label for="cover_image" class="form-label">Cover image</label>
             <input
             onchange="showImage(event)"
@@ -83,7 +101,11 @@
 
     <div class="my-3">
         <span class="text-danger me-1">Delete Project:</span>
-        @include('admin.partials.form-delete')
+        @include('admin.partials.form-delete',[
+                            'route' => 'projects',
+                            'message' => "Are you sure you want to delete the project:$project->name?",
+                            'entity' => $project
+                        ])
     </div>
 
 
