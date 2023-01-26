@@ -33,6 +33,15 @@
             <tr>
                 <td>{{$project->id}}</td>
                 <td>{{$project->name}} <span class="badge text-bg-info">{{$project->type?->name}}</span></td>
+                <td>
+                    @forelse ($project->technologies as $technology)
+                        <span class="badge text-bg-warning">{{$technology->name}}</span>
+
+                    @empty
+                        - no data -
+                    @endforelse
+
+                </td>
                 <td>{{$project->client_name}}</td>
                 <td>
                     <a class="btn btn-primary" href="{{route('admin.projects.show', $project)}}" title="show"><i class="fa-regular fa-eye"></i></a>

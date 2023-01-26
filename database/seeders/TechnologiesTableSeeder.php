@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Project;
 use App\Models\Technology;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class TechnologiesTableSeeder extends Seeder
 {
@@ -16,10 +16,13 @@ class TechnologiesTableSeeder extends Seeder
      */
     public function run()
     {
-        for($i=0; $i<200;$i++){
-            $project = Project::inRandomOrder()->first();
-            $technology_id = Technology::inRandomOrder()->first()->id;
-            $project->technologies()->attach($technology_id);
+        $data = ['HTML','CSS','JavaScript','PHP','C++'];
+
+        foreach ($data as $technology) {
+            $new_technology = new Technology();
+            $new_technology->name = $technology;
+            $new_technology->slug = Str::slug($technology);
+            $new_technology->save();
         }
     }
 }
