@@ -11,6 +11,7 @@ use App\Models\Technology;
 use App\Models\Type;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Cache\Store;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
@@ -26,7 +27,7 @@ class ProjectController extends Controller
             $search = $_GET['search'];
             $projects = Project::where('name', 'like', "%$search%")->paginate(8);
         }else{
-            $projects = Project::orderBy('id', 'desc')->paginate(8);
+            $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(8);
         }
 
         $direction = 'desc';
@@ -74,6 +75,8 @@ class ProjectController extends Controller
             $project_data['cover_image'] = Storage::put('uploads', $project_data['cover_image']);
         }
 
+        $project_data['user_id'] = Auth::id();
+
         $new_project = Project::create($project_data);
 
         if(array_key_exists('technologies', $project_data)){
@@ -92,7 +95,13 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('admin.projects.show', compact('project'));
+        if($project->user_id = Auth::id()){
+
+            return view('admin.projects.show', compact('project'));
+        }
+
+        return redirect()->route('admin.projects.index');
+
     }
 
     /**
@@ -103,6 +112,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        if($project->user_id != Auth::id()){
+
+            return redirect()->route('admin.projects.index');
+        }
         $types = Type::all();
         $technologies = Technology::all();
         return view('admin.projects.edit', compact('project', 'types', 'technologies'));

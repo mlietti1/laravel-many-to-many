@@ -41,8 +41,8 @@
                     </form>
 
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link protected</a>
+                <li class="nav-item d-flex align-items-center mx-3">
+                    <span class="text-secondary align-middle">{{Auth::user()->name}}</span>
                 </li>
                 <li class="nav-item">
 
